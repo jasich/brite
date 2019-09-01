@@ -1,9 +1,60 @@
 defmodule MonitrorTest do
   use ExUnit.Case, async: true
 
-  describe "adjust with :brighten" do
+  @default_brightness 80
+  @default_contrast 75
+
+  setup_all do
+    Brite.SystemDouble.start(%{
+      "brightness" => @default_brightness,
+      "contrast" => @default_contrast
+    })
+
+    :ok
+  end
+
+  setup do
+    Brite.SystemDouble.put(%{
+      "brightness" => @default_brightness,
+      "contrast" => @default_contrast
+    })
+
+    :ok
+  end
+
+  describe "query(:brightness)" do
+    test "returns current brightness" do
+      assert @default_brightness == Brite.Monitor.query(:brightness)
+    end
+  end
+
+  describe "query(:contrast)" do
+    test "returns the current contrast" do
+      assert @default_contrast == Brite.Monitor.query(:contrast)
+    end
+  end
+
+  describe "adjust(:brighten)" do
     test "increases brightness & contrast by 5" do
-      assert 85 == Brite.Monitor.adjust(:brighten)
+      Brite.Monitor.adjust(:brighten)
+
+      adjusted_brightness = @default_brightness + 5
+      adjusted_contrast = @default_contrast + 5
+
+      assert adjusted_brightness == Brite.Monitor.query(:brightness)
+      assert adjusted_contrast == Brite.Monitor.query(:contrast)
+    end
+  end
+
+  describe "adjust(:lighten)" do
+    test "decreases brightness & contrast by 5" do
+      Brite.Monitor.adjust(:lighten)
+
+      adjusted_brightness = @default_brightness - 5
+      adjusted_contrast = @default_contrast - 5
+
+      assert adjusted_brightness == Brite.Monitor.query(:brightness)
+      assert adjusted_contrast == Brite.Monitor.query(:contrast)
     end
   end
 end
