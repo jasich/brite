@@ -23,3 +23,5 @@ erl_crash.dump
 brite-*.tar
 
 .elixir_ls
+
+.vscode
