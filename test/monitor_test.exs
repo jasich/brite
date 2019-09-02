@@ -1,4 +1,5 @@
-defmodule MonitrorTest do
+defmodule MonitorTest do
+  alias Brite.Monitor, as: Monitor
   use ExUnit.Case, async: true
 
   @default_brightness 80
@@ -24,37 +25,37 @@ defmodule MonitrorTest do
 
   describe "query(:brightness)" do
     test "returns current brightness" do
-      assert @default_brightness == Brite.Monitor.query(:brightness)
+      assert @default_brightness == Monitor.query(:brightness)
     end
   end
 
   describe "query(:contrast)" do
     test "returns the current contrast" do
-      assert @default_contrast == Brite.Monitor.query(:contrast)
+      assert @default_contrast == Monitor.query(:contrast)
     end
   end
 
   describe "adjust(:brighten)" do
     test "increases brightness & contrast by 5" do
-      Brite.Monitor.adjust(:brighten)
+      Monitor.adjust(:brighten)
 
       adjusted_brightness = @default_brightness + 5
       adjusted_contrast = @default_contrast + 5
 
-      assert adjusted_brightness == Brite.Monitor.query(:brightness)
-      assert adjusted_contrast == Brite.Monitor.query(:contrast)
+      assert adjusted_brightness == Monitor.query(:brightness)
+      assert adjusted_contrast == Monitor.query(:contrast)
     end
   end
 
   describe "adjust(:lighten)" do
     test "decreases brightness & contrast by 5" do
-      Brite.Monitor.adjust(:lighten)
+      Monitor.adjust(:lighten)
 
       adjusted_brightness = @default_brightness - 5
       adjusted_contrast = @default_contrast - 5
 
-      assert adjusted_brightness == Brite.Monitor.query(:brightness)
-      assert adjusted_contrast == Brite.Monitor.query(:contrast)
+      assert adjusted_brightness == Monitor.query(:brightness)
+      assert adjusted_contrast == Monitor.query(:contrast)
     end
   end
 end
