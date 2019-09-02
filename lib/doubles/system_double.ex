@@ -36,16 +36,27 @@ defmodule Brite.SystemDouble do
       contrast_query?(args) ->
         {"current: #{current_contrast()},", 0}
 
-      adjustment?(args) ->
-        third_to_last_index = length(args) - 3
-        contrast = Enum.at(args, third_to_last_index)
+      brightness_adjustment?(args) ->
+        send(Brite.SystemDouble, {:get, self()})
 
-        put(%{
-          "brightness" => Enum.at(args, length(args) - 1),
-          "contrast" => contrast
-        })
+        receive do
+          ddcctl_values ->
+            new_value = Map.put(ddcctl_values, "brightness", Enum.at(args, length(args) - 1))
+            put(new_value)
 
-        {"blah", 0}
+            {"blah", 0}
+        end
+
+      contrast_adjustment?(args) ->
+        send(Brite.SystemDouble, {:get, self()})
+
+        receive do
+          ddcctl_values ->
+            new_value = Map.put(ddcctl_values, "contrast", Enum.at(args, length(args) - 1))
+            put(new_value)
+
+            {"blah", 0}
+        end
 
       true ->
         {"", 1}
@@ -80,9 +91,15 @@ defmodule Brite.SystemDouble do
     List.last(args) == "?" && query_item == "-c"
   end
 
-  defp adjustment?(args) do
+  defp brightness_adjustment?(args) do
     second_to_last_index = length(args) - 2
     query_item = Enum.at(args, second_to_last_index)
     List.last(args) != "?" && query_item == "-b"
+  end
+
+  defp contrast_adjustment?(args) do
+    second_to_last_index = length(args) - 2
+    query_item = Enum.at(args, second_to_last_index)
+    List.last(args) != "?" && query_item == "-c"
   end
 end
