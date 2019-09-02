@@ -26,40 +26,43 @@ defmodule Brite.Monitor do
       Integer.to_string(brightness)
     ]
 
-    {_, return_code} = @system.cmd("ddcctl", args)
-
-    if return_code == 0 do
-      :ok
-    else
-      :error
+    case @system.cmd("ddcctl", args) do
+      {_, 0} -> :ok
+      _ -> :error
     end
   end
 
-  def query(:brightness) do
-    execute_query(
-      ["-d", "1", "-b", "\?"],
-      ~r/current: (?<brightness>[0-9]+),/,
-      "brightness"
-    )
+  def query(:brightness), do: query_integer("brightness")
+  def query(:contrast), do: query_integer("contrast")
+
+  defp query_integer(property_name) do
+    case query_helper(property_name) do
+      {:ok, value} ->
+        case Integer.parse(value) do
+          {int_value, _} ->
+            int_value
+
+          :error ->
+            :error
+        end
+
+      {:error} ->
+        :error
+    end
   end
 
-  def query(:contrast) do
-    execute_query(
-      ["-d", "1", "-c", "\?"],
-      ~r/current: (?<contrast>[0-9]+),/,
-      "contrast"
-    )
-  end
-
-  defp execute_query(args, regex, capture_name) do
+  defp query_helper(property_name) do
+    first_char_of_name = Enum.at(String.codepoints(property_name), 0)
+    args = ["-d", "1", "-#{first_char_of_name}", "\?"]
     {output, return_code} = @system.cmd("ddcctl", args)
+
+    regex = ~r/current: (?<value>[0-9]+),/
 
     if return_code == 0 do
       captures = Regex.named_captures(regex, output)
-      {int_value, _} = Integer.parse(captures[capture_name])
-      int_value
+      {:ok, captures["value"]}
     else
-      0
+      {:error}
     end
   end
 end
