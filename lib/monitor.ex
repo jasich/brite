@@ -1,21 +1,19 @@
 defmodule Brite.Monitor do
   alias Brite.Ddcctl, as: Ddcctl
 
-  @adjust_step 5
-
-  def adjust(:brighten) do
-    new_brightness = Ddcctl.query("brightness") + @adjust_step
+  def brighten(value \\ 5) do
+    new_brightness = Ddcctl.query("brightness") + value
     Ddcctl.set("brightness", new_brightness)
 
-    new_contrast = Ddcctl.query("contrast") + @adjust_step
+    new_contrast = Ddcctl.query("contrast") + value
     Ddcctl.set("contrast", new_contrast)
   end
 
-  def adjust(:darken) do
-    new_brightness = Ddcctl.query("brightness") - @adjust_step
+  def darken(value \\ 5) do
+    new_brightness = Ddcctl.query("brightness") - value
     Ddcctl.set("brightness", new_brightness)
 
-    new_contrast = Ddcctl.query("contrast") - @adjust_step
+    new_contrast = Ddcctl.query("contrast") - value
     Ddcctl.set("contrast", new_contrast)
   end
 

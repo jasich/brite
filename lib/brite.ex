@@ -12,7 +12,7 @@ defmodule Brite do
     description("Turns up brightness")
 
     run _context do
-      Brite.Monitor.adjust(:brighten)
+      Brite.Monitor.brighten()
     end
   end
 
@@ -21,7 +21,7 @@ defmodule Brite do
     description("Turns down brightness")
 
     run _context do
-      Brite.Monitor.adjust(:darken)
+      Brite.Monitor.darken()
     end
   end
 
