@@ -1,18 +1,38 @@
 defmodule Brite do
   @moduledoc """
-  Documentation for Brite.
+  Brite is an executable for increasing/decreasing monitor brightness.
   """
+  use ExCLI.DSL, escript: true
 
-  @doc """
-  Hello world.
+  name("brite")
+  description("Increase/Decrease monitor brightness")
 
-  ## Examples
+  command :brighten do
+    aliases([:up])
+    description("Turns up brightness")
 
-      iex> Brite.hello()
-      :world
+    run _context do
+      Brite.Monitor.adjust(:brighten)
+    end
+  end
 
-  """
-  def hello do
-    :world
+  command :darken do
+    aliases([:down])
+    description("Turns down brightness")
+
+    run _context do
+      Brite.Monitor.adjust(:darken)
+    end
+  end
+
+  command :cur do
+    description("Queries current value")
+
+    run _context do
+      brightness = Brite.Monitor.query(:brightness)
+      contrast = Brite.Monitor.query(:contrast)
+
+      IO.puts("Brightness: #{brightness}, Contrast: #{contrast}")
+    end
   end
 end

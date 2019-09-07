@@ -25,3 +25,5 @@ brite-*.tar
 .elixir_ls
 
 .vscode
+
+brite
