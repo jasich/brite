@@ -11,7 +11,7 @@ defmodule Brite.Monitor do
     Ddcctl.set("contrast", new_contrast)
   end
 
-  def adjust(:lighten) do
+  def adjust(:darken) do
     new_brightness = Ddcctl.query("brightness") - @adjust_step
     Ddcctl.set("brightness", new_brightness)
 

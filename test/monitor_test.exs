@@ -1,16 +1,12 @@
 defmodule MonitorTest do
+  use ExUnit.Case
   alias Brite.Monitor, as: Monitor
-  use ExUnit.Case, async: true
 
   @default_brightness 80
   @default_contrast 75
 
   setup_all do
-    Brite.SystemDouble.start(%{
-      "brightness" => @default_brightness,
-      "contrast" => @default_contrast
-    })
-
+    Brite.SystemDouble.start()
     :ok
   end
 
@@ -47,9 +43,9 @@ defmodule MonitorTest do
     end
   end
 
-  describe "adjust(:lighten)" do
+  describe "adjust(:darken)" do
     test "decreases brightness & contrast by 5" do
-      Monitor.adjust(:lighten)
+      Monitor.adjust(:darken)
 
       adjusted_brightness = @default_brightness - 5
       adjusted_contrast = @default_contrast - 5
