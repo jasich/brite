@@ -11,8 +11,10 @@ defmodule Brite do
     aliases([:up])
     description("Turns up brightness")
 
-    run _context do
-      Brite.Monitor.brighten()
+    argument(:value, type: :integer, default: nil)
+
+    run context do
+      Brite.Monitor.brighten(context.value)
     end
   end
 
@@ -20,8 +22,10 @@ defmodule Brite do
     aliases([:down])
     description("Turns down brightness")
 
-    run _context do
-      Brite.Monitor.darken()
+    argument(:value, type: :integer, default: nil)
+
+    run context do
+      Brite.Monitor.darken(context.value)
     end
   end
 
