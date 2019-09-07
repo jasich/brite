@@ -1,4 +1,4 @@
-defmodule Brite do
+defmodule Brite.BriteCLI do
   @moduledoc """
   Brite is an executable for increasing/decreasing monitor brightness.
   """

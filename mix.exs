@@ -8,7 +8,7 @@ defmodule Brite.MixProject do
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      escript: [main_module: Brite]
+      escript: [main_module: Brite.BriteCLI]
     ]
   end
 
