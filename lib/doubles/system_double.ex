@@ -1,19 +1,10 @@
 defmodule Brite.SystemDouble do
+  @behaviour Brite.Systemable
+
   def start(initial \\ %{}) do
     process = spawn_link(fn -> execute(initial) end)
     Process.register(process, Brite.SystemDouble)
     process
-  end
-
-  def execute(state) do
-    receive do
-      {:get, sender} ->
-        send(sender, state)
-        execute(state)
-
-      {:put, val} ->
-        execute(val)
-    end
   end
 
   def put(value) do
@@ -28,6 +19,7 @@ defmodule Brite.SystemDouble do
     end
   end
 
+  @impl Brite.Systemable
   def cmd(_command, args) do
     cond do
       brightness_query?(args) ->
@@ -63,7 +55,18 @@ defmodule Brite.SystemDouble do
     end
   end
 
-  def current_brightness do
+  defp execute(state) do
+    receive do
+      {:get, sender} ->
+        send(sender, state)
+        execute(state)
+
+      {:put, val} ->
+        execute(val)
+    end
+  end
+
+  defp current_brightness do
     send(Brite.SystemDouble, {:get, self()})
 
     receive do
@@ -71,7 +74,7 @@ defmodule Brite.SystemDouble do
     end
   end
 
-  def current_contrast do
+  defp current_contrast do
     send(Brite.SystemDouble, {:get, self()})
 
     receive do
