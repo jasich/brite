@@ -11,10 +11,14 @@ defmodule Brite.BriteCLI do
     aliases([:up])
     description("Turns up brightness")
 
-    argument(:value, type: :integer, default: nil)
+    option(:value, required: false, type: :integer, default: nil, aliases: [:v])
 
     run context do
-      Brite.Monitor.brighten(context.value)
+      if Map.has_key?(context, :value) do
+        Brite.Monitor.brighten(context.value)
+      else
+        Brite.Monitor.brighten()
+      end
     end
   end
 
@@ -22,10 +26,14 @@ defmodule Brite.BriteCLI do
     aliases([:down])
     description("Turns down brightness")
 
-    argument(:value, type: :integer, default: nil)
+    option(:value, required: false, type: :integer, default: nil, aliases: [:v])
 
     run context do
-      Brite.Monitor.darken(context.value)
+      if Map.has_key?(context, :value) do
+        Brite.Monitor.darken(context.value)
+      else
+        Brite.Monitor.darken()
+      end
     end
   end
 
