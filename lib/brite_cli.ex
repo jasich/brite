@@ -39,4 +39,15 @@ defmodule Brite.BriteCLI do
       IO.puts("Brightness: #{brightness}, Contrast: #{contrast}")
     end
   end
+
+  command :set do
+    description("Sets the brightness and contrast directly")
+
+    argument(:brightness, type: :integer, default: nil)
+    argument(:contrast, type: :integer, default: nil)
+
+    run context do
+      Brite.Monitor.set(context.brightness, context.contrast)
+    end
+  end
 end
