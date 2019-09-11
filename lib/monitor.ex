@@ -19,4 +19,9 @@ defmodule Brite.Monitor do
 
   def query(:brightness), do: Ddcctl.query("brightness")
   def query(:contrast), do: Ddcctl.query("contrast")
+
+  def set(brightness, contrast) do
+    Ddcctl.set("brightness", brightness)
+    Ddcctl.set("contrast", contrast)
+  end
 end
