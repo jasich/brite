@@ -5,13 +5,17 @@ defmodule Brite.Ddcctl do
   @system Application.get_env(:brite, :system)
 
   def set(property_name, value) do
-    arg = ddcctl_property_argument(property_name)
-    string_value = Integer.to_string(value)
-    args = ["-d", "1", arg, string_value]
+    if value < 0 || value > 100 do
+      :error
+    else
+      arg = ddcctl_property_argument(property_name)
+      string_value = Integer.to_string(value)
+      args = ["-d", "1", arg, string_value]
 
-    case @system.cmd("ddcctl", args) do
-      {_, 0} -> :ok
-      _ -> :error
+      case @system.cmd("ddcctl", args) do
+        {_, 0} -> :ok
+        _ -> :error
+      end
     end
   end
 

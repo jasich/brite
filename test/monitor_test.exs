@@ -54,8 +54,13 @@ defmodule MonitorTest do
       assert adjusted_contrast == Monitor.query(:contrast)
     end
 
-    @tag skip: "this test is incomplete - decide on final biz logic and assert"
     test "can't increase past 100" do
+      Monitor.set(100, 100)
+
+      Monitor.brighten(5)
+
+      assert 100 == Monitor.query(:brightness)
+      assert 100 == Monitor.query(:contrast)
     end
   end
 
@@ -81,9 +86,23 @@ defmodule MonitorTest do
       assert adjusted_brightness == Monitor.query(:brightness)
       assert adjusted_contrast == Monitor.query(:contrast)
     end
+
+    test "can't decrease past 0" do
+      Monitor.set(0, 0)
+
+      Monitor.darken(5)
+
+      assert 0 == Monitor.query(:brightness)
+      assert 0 == Monitor.query(:contrast)
+    end
   end
 
-  @tag skip: "this test is incomplete - decide on final biz logic and assert"
-  test "can't decrease past 0" do
+  describe "set/2" do
+    test "sets the brightness & contrast directly" do
+      Monitor.set(40, 30)
+
+      assert 40 == Monitor.query(:brightness)
+      assert 30 == Monitor.query(:contrast)
+    end
   end
 end
